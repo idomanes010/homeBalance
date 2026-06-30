@@ -146,3 +146,23 @@
     background: var(--surface-2);
     color: var(--text);
 }
+
+@media (max-width: 768px) {
+    .list-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .list-header-right {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .month-picker-trigger,
+    .member-filter,
+    .list-header button {
+        flex: 1;
+        min-width: 0;
+        justify-content: center;
+    }
+}

@@ -164,3 +164,37 @@
     color: var(--text-light);
     white-space: nowrap;
 }
+
+@media (max-width: 480px) {
+    .ExpenseCard {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .expense-info {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .title {
+        white-space: normal;
+        flex-basis: 100%;
+        order: -1;
+    }
+
+    .category {
+        min-width: 0;
+    }
+
+    .amount,
+    .date {
+        min-width: 0;
+        text-align: left;
+    }
+
+    .actions {
+        justify-content: flex-end;
+        margin-top: 4px;
+    }
+}
