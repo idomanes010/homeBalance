@@ -1,0 +1,42 @@
+/* ── App Shell ── */
+
+.Layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.Layout header {
+    height: var(--header-height);
+    min-height: var(--header-height);
+    background: var(--header-bg);
+    background: rgba(10, 8, 24, 0.85);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 4px 24px rgba(0, 0, 0, 0.32);
+}
+
+.Layout nav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    height: calc(100vh - var(--header-height));
+    z-index: 90;
+    width: var(--sidebar-width);
+}
+
+.Layout main {
+    margin-left: var(--sidebar-width);
+    padding: 36px 40px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29 0%, #1a1535 40%, #0d0b1a 100%);
+    background-attachment: fixed;
+    animation: fadeUp var(--t-slow) var(--ease-expo);
+}
