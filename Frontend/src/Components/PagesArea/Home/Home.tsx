@@ -8,6 +8,7 @@ import { expenseService } from "../../../Services/ExpenseService";
 import { useAuth } from "../../../Context/AuthContext";
 import { useRef } from "react";
 import { useCurrency } from "../../../Utils/UserCurrency";
+import { Spinner } from "../../SharedArea/Spinner/Spinner";
 
 // Colors for pie chart:
 const COLORS = [
@@ -106,7 +107,7 @@ export function Home() {
                 </div>
             </div>
 
-            {loading && <p>Loading...</p>}
+            {loading && <Spinner />}
 
             {
                 !loading && (

@@ -38,7 +38,6 @@ export function ExpenseList() {
                     householdService.getHousehold()
                 ]);
                 setExpenses(expenseData);
-                console.log("members:", householdData.members); // ← add here
                 setMembers(householdData.members as UserModel[] || []);
             }
             catch (err: any) {

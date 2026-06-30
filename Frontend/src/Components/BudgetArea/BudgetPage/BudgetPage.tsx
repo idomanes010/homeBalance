@@ -6,6 +6,7 @@ import { budgetService } from "../../../Services/BudgetService";
 import { expenseService } from "../../../Services/ExpenseService";
 import { notify } from "../../../Utils/Notify";
 import { useCurrency } from "../../../Utils/UserCurrency";
+import { Spinner } from "../../SharedArea/Spinner/Spinner";
 
 export function BudgetPage() {
     const [budgets, setBudgets] = useState<MonthlyBudgetModel[]>([]);
@@ -139,7 +140,7 @@ export function BudgetPage() {
                 <button type="submit">Save Budget</button>
             </form>
 
-            {loading && <p>Loading...</p>}
+            {loading && <Spinner />}
             {!loading && budgets.length === 0 && <p className="empty-state">No budgets set yet. Add your first one above!</p>}
 
             {budgets.map(budget => {

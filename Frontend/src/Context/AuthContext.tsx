@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
-import { UserModel } from "../Models/UserModel";
-import { appConfig } from "../Utils/AppConfig";
+import { createContext, useContext, useReducer, useEffect, useState } from "react";
 import axiosInstance from "../Utils/AxiosInstance";
+import { appConfig } from "../Utils/AppConfig";
+import { UserModel } from "../Models/UserModel";
 
 interface AuthState {
     user: UserModel | null;
@@ -52,6 +52,7 @@ const AuthContext = createContext<{
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(authReducer, getInitialState());
+    const [isInitializing, setIsInitializing] = useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -73,9 +74,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 .catch(() => {
                     localStorage.removeItem("token");
                     dispatch({ type: "LOGOUT" });
-                });
+                })
+                .finally(() => setIsInitializing(false));
+        } else {
+            setIsInitializing(false);
         }
     }, []);
+
+    if (isInitializing) {
+        return (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+                <div className="Spinner"></div>
+            </div>
+        );
+    }
 
     return (
         <AuthContext.Provider value={{ state, dispatch }}>
