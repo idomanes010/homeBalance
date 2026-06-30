@@ -451,3 +451,13 @@
         padding: 16px;
     }
 }
+
+@media (max-width: 480px) {
+    .chart-center-label {
+        font-size: 9px;
+    }
+
+    .chart-center-amount {
+        font-size: 18px;
+    }
+}
