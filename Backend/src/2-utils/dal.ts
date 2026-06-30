@@ -9,6 +9,7 @@ class Dal {
         password: appConfig.postgresPassword,
         database: appConfig.postgresDatabase,
         port: appConfig.postgresPort,
+        ssl: appConfig.isProduction ? { rejectUnauthorized: false } : false,
     });
 
     public async execute(
