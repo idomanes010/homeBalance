@@ -9,6 +9,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 import { UserModel } from "../../../Models/UserModel";
 import { householdService } from "../../../Services/HouseholdService";
 import { useCurrency } from "../../../Utils/UserCurrency";
+import { Spinner } from "../../SharedArea/Spinner/Spinner";
 
 const COLORS = [
     "#352dcc", "#952c9c", "#db2777",
@@ -26,6 +27,7 @@ export function ExpenseList() {
     const [selectedMonth, setSelectedMonth] = useState(getCurrentMonth());
     const [selectedMember, setSelectedMember] = useState<number | null>(null);
     const [members, setMembers] = useState<UserModel[]>([]);
+    const [loading, setLoading] = useState(true);
     const monthInputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const { format, currency } = useCurrency();
@@ -43,9 +45,13 @@ export function ExpenseList() {
             catch (err: any) {
                 notify.error(err);
             }
+            finally {
+                setLoading(false);
+            }
         }
         fetchData();
     }, []);
+    
 
 
     async function handleDelete(id: number) {
@@ -78,72 +84,75 @@ export function ExpenseList() {
     }, []);
 
     return (
-        <div className="ExpenseList">
-            <div className="list-header">
-                <h2>Expenses</h2>
-                <div className="list-header-right">
-                    <div className="month-picker-trigger" onClick={() => monthInputRef.current?.showPicker()}>
-                        <span>📅 {selectedMonth}</span>
-                        <input
-                            ref={monthInputRef}
-                            type="month"
-                            value={selectedMonth}
-                            onChange={e => setSelectedMonth(e.target.value)}
-                            style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
-                        />
-                    </div>
-
-                    <select
-                        className="member-filter"
-                        value={selectedMember ?? ""}
-                        onChange={e => setSelectedMember(e.target.value ? Number(e.target.value) : null)}
-                    >
-                        <option value="">👥 All Members</option>
-                        {members.map(member => (
-                            <option key={(member as any).userId} value={(member as any).userId}>
-                                👤 {member.firstName} {member.lastName}
-                            </option>
-                        ))}
-                    </select>
-
-                    <button onClick={() => navigate("/expenses/new")}>+ Add Expense</button>
+    <div className="ExpenseList">
+        <div className="list-header">
+            <h2>Expenses</h2>
+            <div className="list-header-right">
+                <div className="month-picker-trigger" onClick={() => monthInputRef.current?.showPicker()}>
+                    <span>📅 {selectedMonth}</span>
+                    <input
+                        ref={monthInputRef}
+                        type="month"
+                        value={selectedMonth}
+                        onChange={e => setSelectedMonth(e.target.value)}
+                        style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
+                    />
                 </div>
+
+                <select
+                    className="member-filter"
+                    value={selectedMember ?? ""}
+                    onChange={e => setSelectedMember(e.target.value ? Number(e.target.value) : null)}
+                >
+                    <option value="">👥 All Members</option>
+                    {members.map(member => (
+                        <option key={(member as any).userId} value={(member as any).userId}>
+                            👤 {member.firstName} {member.lastName}
+                        </option>
+                    ))}
+                </select>
+
+                <button onClick={() => navigate("/expenses/new")}>+ Add Expense</button>
             </div>
-
-            {/* Bar chart */}
-            {categoryData.length > 0 && (
-                <div className="expense-chart">
-                    <h3>Spending by Category — {selectedMonth}</h3>
-                    <ResponsiveContainer width="100%" height={220}>
-                        <BarChart data={categoryData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                            <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#6b7280" }} axisLine={false} tickLine={false} />
-                            <YAxis
-                                tick={{ fontSize: 12, fill: "#6b7280" }}
-                                axisLine={false}
-                                tickLine={false}
-                                tickFormatter={(v) => `${currency}${v}`}
-                            />
-                            <Tooltip
-                                formatter={(value: any) => [format(value), "Spent"]}
-                                cursor={{ fill: "rgba(79,70,229,0.06)" }}
-                            />
-                            <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={60}>
-                                {categoryData.map((_, index) => (
-                                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                            </Bar>
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
-            )}
-
-            {filteredExpenses.map(expense => (
-                <ExpenseCard key={expense.id} expense={expense} onDelete={handleDelete} />
-            ))}
-
-            {filteredExpenses.length === 0 && (
-                <p className="empty">No expenses found for the selected filters.</p>
-            )}
         </div>
-    );
+
+        {loading ? (<Spinner />) : (<>
+                {/* Bar chart */}
+                {categoryData.length > 0 && (
+                    <div className="expense-chart">
+                        <h3>Spending by Category — {selectedMonth}</h3>
+                        <ResponsiveContainer width="100%" height={220}>
+                            <BarChart data={categoryData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                                <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                                <YAxis
+                                    tick={{ fontSize: 12, fill: "#6b7280" }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tickFormatter={(v) => `${currency}${v}`}
+                                />
+                                <Tooltip
+                                    formatter={(value: any) => [format(value), "Spent"]}
+                                    cursor={{ fill: "rgba(79,70,229,0.06)" }}
+                                />
+                                <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={60}>
+                                    {categoryData.map((_, index) => (
+                                        <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                )}
+
+                {filteredExpenses.map(expense => (
+                    <ExpenseCard key={expense.id} expense={expense} onDelete={handleDelete} />
+                ))}
+
+                {filteredExpenses.length === 0 && (
+                    <p className="empty">No expenses found for the selected filters.</p>
+                )}
+            </>
+        )}
+    </div>
+);
 }

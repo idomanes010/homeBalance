@@ -5,6 +5,7 @@ import "./Household.css";
 // import { useNavigate } from "react-router-dom";
 import { notify } from "../../../Utils/Notify";
 import { useAuth } from "../../../Context/AuthContext";
+import { Spinner } from "../../SharedArea/Spinner/Spinner";
 
 export function Household() {
     const [household, setHousehold] = useState<HouseholdModel | null>(null);
@@ -43,7 +44,7 @@ export function Household() {
         setTimeout(() => setCopied(false), 2500);
     }
 
-    if (!household) return <p>Loading...</p>;
+    if (!household) return <Spinner />;
 
     return (
         <div className="Household">
