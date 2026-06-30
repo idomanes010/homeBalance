@@ -40,3 +40,13 @@
     background-attachment: fixed;
     animation: fadeUp var(--t-slow) var(--ease-expo);
 }
+
+@media (max-width: 480px) {
+    :root {
+        --header-height: 60px;
+    }
+
+    .Layout main {
+        padding: 20px 16px;
+    }
+}

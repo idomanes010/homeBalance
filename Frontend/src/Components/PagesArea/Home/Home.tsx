@@ -36,6 +36,7 @@ export function Home() {
     const [loading, setLoading] = useState(true);
     const [chartReady, setChartReady] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
     const monthInputRef = useRef<HTMLInputElement>(null);
     const { state } = useAuth();
     const { format } = useCurrency();
@@ -65,6 +66,14 @@ export function Home() {
         }
         fetchData();
     }, [selectedMonth, state.isLoggedIn]);
+
+    useEffect(() => {
+        function handleResize() {
+            setIsMobile(window.innerWidth <= 480);
+        }
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     // Calculations:
     const totalSpent = expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
@@ -110,8 +119,7 @@ export function Home() {
             {loading && <Spinner />}
 
             {
-                !loading && (
-                    <>
+                !loading && (<>
                         {/* Summary cards — OUTSIDE the chart */}
                         <div className="summary-cards">
                             <div className="card">
@@ -146,11 +154,10 @@ export function Home() {
                                                 nameKey="name"
                                                 cx="50%"
                                                 cy="50%"
-                                                innerRadius={85}
-                                                outerRadius={140}
+                                                innerRadius={isMobile ? 55 : 85}
+                                                outerRadius={isMobile ? 90 : 140}
                                                 paddingAngle={0.8}
-                                                stroke="none"
-                                            >
+                                                stroke="none">
                                                 {categoryData.map((_, index) => (
                                                     <Cell key={index} fill={COLORS[index % COLORS.length]} />
                                                 ))}
@@ -159,12 +166,10 @@ export function Home() {
                                         </PieChart>
                                     </ResponsiveContainer>
                                     <div className="chart-center">
-                                        {chartReady && (
-                                            <>
+                                        {chartReady && (<>
                                                 <span className="chart-center-label">Total Spent</span>
                                                 <span className="chart-center-amount">{format(totalSpent)}</span>
-                                            </>
-                                        )}
+                                            </>)}
                                     </div>
                                 </div>
 
@@ -175,8 +180,7 @@ export function Home() {
                                             <div
                                                 key={item.name}
                                                 className={`legend-item ${selectedCategory === item.name ? "legend-item--active" : ""}`}
-                                                onClick={() => setSelectedCategory(prev => prev === item.name ? null : item.name)}
-                                            >
+                                                onClick={() => setSelectedCategory(prev => prev === item.name ? null : item.name)}>
                                                 <div className="legend-icon" style={{ background: COLORS[index % COLORS.length] }}>
                                                     {item.name.charAt(0)}
                                                 </div>
@@ -189,15 +193,13 @@ export function Home() {
 
                                     {/* Side panel */}
                                     <div className={`category-panel ${selectedCategory ? "category-panel--open" : ""}`}>
-                                        {selectedCategory && (
-                                            <>
+                                        {selectedCategory && (<>
                                                 <div className="panel-header">
                                                     <div
                                                         className="panel-icon"
                                                         style={{
                                                             background: COLORS[categoryData.findIndex(c => c.name === selectedCategory) % COLORS.length]
-                                                        }}
-                                                    >
+                                                        }}>
                                                         {selectedCategory.charAt(0)}
                                                     </div>
                                                     <div>

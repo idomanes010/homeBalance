@@ -87,3 +87,28 @@
 .UserMenu button:active {
     transform: scale(0.97);
 }
+
+@media (max-width: 480px) {
+    .Header {
+        padding: 0 12px;
+        height: 60px;
+    }
+
+    .Header h1 {
+        font-size: 18px;
+    }
+
+    .UserMenu {
+        gap: 8px;
+    }
+
+    .UserMenu .logged-in span {
+        display: none;
+    }
+
+    .UserMenu button {
+        height: 28px;
+        padding: 0 10px;
+        font-size: 11px;
+    }
+}

@@ -441,3 +441,13 @@
         width: 100% !important;
     }
 }
+
+@media (max-width: 480px) {
+    .chart-wrapper {
+        height: 260px;
+    }
+
+    .chart-section {
+        padding: 16px;
+    }
+}
