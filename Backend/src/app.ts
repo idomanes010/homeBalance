@@ -49,7 +49,13 @@ class App {
             server.use("/api/users/register", authLimiter);
 
             // Standard middleware:
-            server.use(cors());
+            server.use(cors({
+                origin: [
+                    "https://home-balance-z6ug.vercel.app",
+                    "http://localhost:5173"
+                ],
+                credentials: true
+            }));
             server.use(express.json());
 
             // Routers:
