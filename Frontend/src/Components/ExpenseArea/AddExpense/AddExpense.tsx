@@ -14,6 +14,7 @@ export function AddExpense() {
     const dateInputRef = useRef<HTMLInputElement>(null);
     const { ref: registerDateRef, ...dateRest } = register("expenseDate");
     const [selectedDate, setSelectedDate] = useState<string>("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const watchCategoryId = watch("categoryId");
     const navigate = useNavigate();
     const selectedCategory = categories.find(c => c.id === +(watchCategoryId ?? 0));
@@ -33,7 +34,9 @@ export function AddExpense() {
 
 
     async function send(expense: ExpensesModel) {
+        if (isSubmitting) return;
         try {
+            setIsSubmitting(true);
             await expenseService.createExpense(expense);
             notify.success("Expense added!");
             navigate("/expenses")
@@ -41,6 +44,7 @@ export function AddExpense() {
         }
         catch (err: any) {
             notify.error(err);
+            setIsSubmitting(false);
         }
     }
 
@@ -102,7 +106,9 @@ export function AddExpense() {
                     <textarea placeholder="Enter notes..." {...register("note")} />
                 </div>
 
-                <button type="submit">Add Expense</button>
+                <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Adding..." : "Add Expense"}
+                </button>
             </form>
         </div>
     );

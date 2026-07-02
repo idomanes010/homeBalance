@@ -13,6 +13,7 @@ export function EditExpense() {
     const { register, handleSubmit, watch, setValue } = useForm<ExpensesModel>();
     const watchCategoryId = watch("categoryId");
     const [selectedDate, setSelectedDate] = useState<string>("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const dateInputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const params = useParams();
@@ -47,7 +48,9 @@ export function EditExpense() {
     }, []);
 
     async function send(expense: ExpensesModel) {
+        if (isSubmitting) return;
         try {
+            setIsSubmitting(true);
             expense.id = +params.id!;
             expense.householdId = undefined;
             await expenseService.updateExpense(expense);
@@ -56,6 +59,7 @@ export function EditExpense() {
         }
         catch (err: any) {
             notify.error(err);
+            setIsSubmitting(false);
         }
     }
 
@@ -116,7 +120,9 @@ export function EditExpense() {
                     <textarea placeholder="Enter notes..." {...register("note")} />
                 </div>
 
-                <button type="submit">Update Expense</button>
+                <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Updating..." : "Update Expense"}
+                </button>
             </form>
         </div>
     );
