@@ -35,6 +35,9 @@ export function ExpenseCard({ expense, onDelete }: Props) {
                 {expense.createdByName && (
                     <span className="created-by">👤 {expense.createdByName}</span>
                 )}
+                {expense.note && (
+                    <span className="note-text">📝 {expense.note}</span>
+                )}
             </div>
 
             {/* Expanded details — mobile only */}
@@ -45,6 +48,9 @@ export function ExpenseCard({ expense, onDelete }: Props) {
                     </span>
                     {expense.createdByName && (
                         <span className="detail-item">👤 {expense.createdByName}</span>
+                    )}
+                    {expense.note && (
+                        <span className="detail-item">📝 {expense.note}</span>
                     )}
                 </div>
             )}

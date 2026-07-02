@@ -195,4 +195,11 @@
     .export-text {
         display: none;
     }
+
+    .list-header button:last-child {
+        white-space: nowrap;
+        font-size: 12px;
+        padding: 0 10px;
+    }
 }
+

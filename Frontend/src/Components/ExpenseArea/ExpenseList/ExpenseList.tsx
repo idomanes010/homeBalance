@@ -110,6 +110,7 @@ export function ExpenseList() {
         link.download = `expenses-${selectedMonth}.csv`;
         link.click();
         URL.revokeObjectURL(url);
+        notify.success("CSV exported! Tip: select all columns in Excel and auto-fit width for best results.");
     }
 
     return (
