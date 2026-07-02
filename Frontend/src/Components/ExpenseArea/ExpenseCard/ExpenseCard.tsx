@@ -15,10 +15,16 @@ export function ExpenseCard({ expense, onDelete }: Props) {
     const { format } = useCurrency();
     const [expanded, setExpanded] = useState(false);
 
+    function handleClick() {
+        if (window.innerWidth <= 480) {
+            setExpanded(prev => !prev);
+        }
+    }
+
     return (
-        <div className={`ExpenseCard ${expanded ? "ExpenseCard--expanded" : ""}`}
-            onClick={() => setExpanded(prev => !prev)}
-        >
+        <div
+            className={`ExpenseCard ${expanded ? "ExpenseCard--expanded" : ""}`}
+            onClick={handleClick}>
             <div className="expense-info">
                 <span className="category">{expense.categoryName}</span>
                 <span className="title">{expense.title}</span>
