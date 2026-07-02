@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { ExpensesModel } from "../../../Models/ExpensesModel";
-import "./ExpenseCard.css";
 import { useAuth } from "../../../Context/AuthContext";
+import { ExpensesModel } from "../../../Models/ExpensesModel";
 import { useCurrency } from "../../../Utils/UserCurrency";
+import "./ExpenseCard.css";
 
 interface Props {
     expense: ExpensesModel;
@@ -12,9 +13,12 @@ interface Props {
 export function ExpenseCard({ expense, onDelete }: Props) {
     const { state } = useAuth();
     const { format } = useCurrency();
+    const [expanded, setExpanded] = useState(false);
 
     return (
-        <div className="ExpenseCard">
+        <div className={`ExpenseCard ${expanded ? "ExpenseCard--expanded" : ""}`}
+            onClick={() => setExpanded(prev => !prev)}
+        >
             <div className="expense-info">
                 <span className="category">{expense.categoryName}</span>
                 <span className="title">{expense.title}</span>
@@ -26,7 +30,20 @@ export function ExpenseCard({ expense, onDelete }: Props) {
                     <span className="created-by">👤 {expense.createdByName}</span>
                 )}
             </div>
-            <div className="actions">
+
+            {/* Expanded details — mobile only */}
+            {expanded && (
+                <div className="expense-details">
+                    <span className="detail-item">
+                        📅 {expense.expenseDate ? new Date(expense.expenseDate).toLocaleDateString() : ""}
+                    </span>
+                    {expense.createdByName && (
+                        <span className="detail-item">👤 {expense.createdByName}</span>
+                    )}
+                </div>
+            )}
+
+            <div className="actions" onClick={e => e.stopPropagation()}>
                 {state.user?.id === expense.createdBy && (
                     <NavLink to={`/expenses/edit/${expense.id}`}>Edit</NavLink>
                 )}
