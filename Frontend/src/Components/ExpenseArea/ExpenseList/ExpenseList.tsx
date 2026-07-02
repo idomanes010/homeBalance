@@ -51,7 +51,7 @@ export function ExpenseList() {
         }
         fetchData();
     }, []);
-    
+
 
 
     async function handleDelete(id: number) {
@@ -83,41 +83,70 @@ export function ExpenseList() {
         return acc;
     }, []);
 
+    function exportToCSV() {
+        if (filteredExpenses.length === 0) {
+            notify.error("No expenses to export");
+            return;
+        }
+
+        const headers = ["Date", "Title", "Category", "Amount", "Added By"];
+        const rows = filteredExpenses.map(e => [
+            e.expenseDate ? new Date(e.expenseDate).toLocaleDateString() : "",
+            e.title || "",
+            e.categoryName || "",
+            format(e.amount ?? 0),
+            e.createdByName || ""
+        ]);
+
+        const csvContent = [headers, ...rows]
+            .map(row => row.map(cell => `"${cell}"`).join(","))
+            .join("\n");
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `expenses-${selectedMonth}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+    }
+
     return (
-    <div className="ExpenseList">
-        <div className="list-header">
-            <h2>Expenses</h2>
-            <div className="list-header-right">
-                <div className="month-picker-trigger" onClick={() => monthInputRef.current?.showPicker()}>
-                    <span>📅 {selectedMonth}</span>
-                    <input
-                        ref={monthInputRef}
-                        type="month"
-                        value={selectedMonth}
-                        onChange={e => setSelectedMonth(e.target.value)}
-                        style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
-                    />
+        <div className="ExpenseList">
+            <div className="list-header">
+                <h2>Expenses</h2>
+                <div className="list-header-right">
+                    <div className="month-picker-trigger" onClick={() => monthInputRef.current?.showPicker()}>
+                        <span>📅 {selectedMonth}</span>
+                        <input
+                            ref={monthInputRef}
+                            type="month"
+                            value={selectedMonth}
+                            onChange={e => setSelectedMonth(e.target.value)}
+                            style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }} />
+                    </div>
+
+                    <select
+                        className="member-filter"
+                        value={selectedMember ?? ""}
+                        onChange={e => setSelectedMember(e.target.value ? Number(e.target.value) : null)}>
+                        <option value="">👥 All Members</option>
+                        {members.map(member => (
+                            <option key={(member as any).userId} value={(member as any).userId}>
+                                👤 {member.firstName} {member.lastName}
+                            </option>
+                        ))}
+                    </select>
+
+                    <button className="export-btn" onClick={exportToCSV}>
+                        ⬇ <span className="export-text">Export CSV</span>
+                    </button>
+
+                    <button onClick={() => navigate("/expenses/new")}>+ Add Expense</button>
                 </div>
-
-                <select
-                    className="member-filter"
-                    value={selectedMember ?? ""}
-                    onChange={e => setSelectedMember(e.target.value ? Number(e.target.value) : null)}
-                >
-                    <option value="">👥 All Members</option>
-                    {members.map(member => (
-                        <option key={(member as any).userId} value={(member as any).userId}>
-                            👤 {member.firstName} {member.lastName}
-                        </option>
-                    ))}
-                </select>
-
-                <button onClick={() => navigate("/expenses/new")}>+ Add Expense</button>
             </div>
-        </div>
 
-        {loading ? (<Spinner />) : (<>
-                {/* Bar chart */}
+            {loading ? (<Spinner />) : (<>
                 {categoryData.length > 0 && (
                     <div className="expense-chart">
                         <h3>Spending by Category — {selectedMonth}</h3>
@@ -128,12 +157,10 @@ export function ExpenseList() {
                                     tick={{ fontSize: 12, fill: "#6b7280" }}
                                     axisLine={false}
                                     tickLine={false}
-                                    tickFormatter={(v) => `${currency}${v}`}
-                                />
+                                    tickFormatter={(v) => `${currency}${v}`} />
                                 <Tooltip
                                     formatter={(value: any) => [format(value), "Spent"]}
-                                    cursor={{ fill: "rgba(79,70,229,0.06)" }}
-                                />
+                                    cursor={{ fill: "rgba(79,70,229,0.06)" }} />
                                 <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={60}>
                                     {categoryData.map((_, index) => (
                                         <Cell key={index} fill={COLORS[index % COLORS.length]} />
@@ -150,9 +177,8 @@ export function ExpenseList() {
 
                 {filteredExpenses.length === 0 && (
                     <p className="empty">No expenses found for the selected filters.</p>
-                )}
-            </>
-        )}
-    </div>
-);
+                )}</>
+            )}
+        </div>
+    );
 }
