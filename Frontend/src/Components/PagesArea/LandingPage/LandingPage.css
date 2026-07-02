@@ -193,3 +193,82 @@
     color: white;
     letter-spacing: -0.04em;
 }
+
+@media (max-width: 768px) {
+    .LandingPage {
+        padding: 48px 20px;
+    }
+
+    .landing-headline {
+        font-size: 36px;
+    }
+
+    .landing-subheadline {
+        font-size: 15px;
+    }
+
+    .landing-cta {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .cta-primary,
+    .cta-secondary {
+        width: 100%;
+        text-align: center;
+        padding: 14px 24px;
+    }
+
+    .landing-divider {
+        margin: 36px 0;
+    }
+
+    /* Features — 2 columns on tablet */
+    .landing-features {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .landing-feature {
+        padding: 20px 16px;
+    }
+
+    .landing-feature-icon {
+        font-size: 24px;
+    }
+
+    .landing-feature h3 {
+        font-size: 14px;
+    }
+
+    .landing-bottom-cta h2 {
+        font-size: 24px;
+    }
+
+    .landing-bottom-cta {
+        margin-top: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .LandingPage {
+        padding: 36px 16px;
+    }
+
+    .landing-headline {
+        font-size: 28px;
+    }
+
+    .landing-logo {
+        font-size: 22px;
+    }
+
+    /* Features — single column on phone */
+    .landing-features {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-bottom-cta h2 {
+        font-size: 20px;
+    }
+}
