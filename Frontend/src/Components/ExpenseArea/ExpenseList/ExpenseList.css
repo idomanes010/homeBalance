@@ -178,11 +178,19 @@
     }
 
     .month-picker-trigger,
-    .member-filter,
-    .list-header button {
+    .member-filter {
         flex: 1;
         min-width: 0;
-        justify-content: center;
+    }
+
+    .export-btn {
+        flex-shrink: 0;
+    }
+
+    /* Add expense button — full width on its own row */
+    .list-header-right button:last-child {
+        width: 100%;
+        order: 10;
     }
 }
 

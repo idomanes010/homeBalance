@@ -241,6 +241,10 @@
         font-size: 12px;
         color: var(--text-light);
     }
+
+    .note-text {
+        display: none;
+    }
 }
 
 .note-text {
@@ -253,8 +257,3 @@
     max-width: 200px;
 }
 
-@media (max-width: 480px) {
-    .note-text {
-        display: none;
-    }
-}
