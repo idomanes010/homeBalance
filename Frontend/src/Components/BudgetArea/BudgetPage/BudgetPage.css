@@ -244,3 +244,41 @@
     padding: 0 2px;
     gap: 8px;
 }
+
+@media (max-width: 768px) {
+    .BudgetPage {
+        padding: 20px 16px;
+    }
+
+    /* Tips stack vertically */
+    .budget-tips {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    /* Budget row — stack vertically */
+    .budget-row-top {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .budget-month {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .budget-amount {
+        text-align: left;
+        flex: 1;
+    }
+
+    .budget-delete {
+        width: 100%;
+        text-align: center;
+        margin-top: 4px;
+    }
+
+    .budget-progress-labels {
+        font-size: 11px;
+    }
+}

@@ -95,6 +95,13 @@
     transition: all 0.2s;
 }
 
+.EditExpense button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 .EditExpense button[type="submit"]:hover {
     box-shadow: 0 8px 30px rgba(79,70,229,0.5);
     transform: translateY(-1px);

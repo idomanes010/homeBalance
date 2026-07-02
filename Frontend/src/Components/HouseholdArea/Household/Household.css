@@ -284,3 +284,49 @@
     color: var(--text-light);
     font-weight: 500;
 }
+
+@media (max-width: 768px) {
+    .Household {
+        padding: 20px 16px;
+    }
+
+    /* Tips stack vertically */
+    .household-tips {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    /* Invite code row stacks */
+    .invite-code-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .invite-code {
+        text-align: center;
+        font-size: 20px;
+        padding: 12px 16px;
+    }
+
+    .copy-btn {
+        width: 100%;
+    }
+
+    /* Currency options — 2 columns on mobile */
+    .currency-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Members fit within card */
+    .member-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .member-email {
+        margin-left: 0;
+        flex-basis: 100%;
+        font-size: 12px;
+    }
+}
